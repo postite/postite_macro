@@ -6,7 +6,7 @@ import haxe.io.Path;
 import haxe.macro.Expr.Field;
 class MacLoadFile{
     public static function load(file:String){
-       // trace( "hello");
+       
         var t=loadme(file);
         var fields=haxe.macro.Context.getBuildFields();
         for( field in fields){
