@@ -1,0 +1,14 @@
+@:keep @:directlyUsed @:used
+class haxe.rtti.Meta {
+
+	@:pure(true) @:has_untyped
+	static function getMeta(t:Dynamic) {
+		return t.__meta__;
+	}
+
+	@:pure(true)
+	public static function getFields(t:Dynamic) {
+		var meta = haxe.rtti.Meta.getMeta(t);
+		if ((meta == null || meta.fields == null)) return {} else return meta.fields;
+	}
+}

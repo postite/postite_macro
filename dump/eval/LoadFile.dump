@@ -1,0 +1,11 @@
+@:directlyUsed @:used @:build(loadfile.MacLoadFile.load("file.json"))
+class LoadFile {
+
+	@:pure(true)
+	public function new() {
+		this.file = [{name : "one", stuff : "bim"}, {name : "two", stuff : "bam"}];
+	}
+
+	@:value([{ name : "one", stuff : "bim" }, { name : "two", stuff : "bam" }])
+	public var file:Array<Truc>;
+}

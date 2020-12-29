@@ -1,0 +1,9 @@
+@:used
+class Main {
+
+	@:keep
+	static function main() {
+		haxe.Log.trace("Hello, world!", {fileName : "src/Main.hx", lineNumber : 3, className : "Main", methodName : "main"});
+		haxe.Log.trace(new loadfile.LoadFile().doz[0].name, {fileName : "src/Main.hx", lineNumber : 5, className : "Main", methodName : "main"});
+	}
+}

@@ -1,0 +1,16 @@
+@:directlyUsed @:used @:final
+class utest.UTest {
+
+	public static function run<T : run.T>(cases:Array<run.T>, callback:Null<Void -> Void> = null) {
+		var runner = new utest.Runner();
+		{
+			var ` = 0;
+			while ((` < cases.length)) runner.addCase(cases[` ++], null, null, null, null, null, null);
+		};
+		if ((null != callback)) runner.onComplete.add(function(_:utest.Runner) {
+			callback();
+		});
+		utest.ui.Report.create(runner, null, null);
+		runner.run();
+	}
+}

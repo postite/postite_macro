@@ -1,0 +1,226 @@
+@:access(utest.Runner.iTestFixtures) @:access(utest.Runner.runNext) @:access(utest.Runner.runFixture) @:access(utest.Runner.executedFixtures)
+private class utest._Runner.ITestRunner {
+
+	public function new(runner:utest.Runner) {
+		this.failedCases = [];
+		this.failedTestsInCurrentCase = [];
+		var _gthis = this;
+		this.runner = runner;
+		runner.onTestComplete.add(function(handler:utest.TestHandler<utest.TestFixture>) {
+			var _g = new haxe.ds._List.ListIterator(handler.results.h);
+			while ((_g.head != null)) {
+				var val = _g.head.item;
+				_g.head = _g.head.next;
+				if ((enumIndex val != 0)) {
+					_gthis.failedTestsInCurrentCase.push(handler.fixture.method);
+					_gthis.failedCases.push(Type.getClassName(Type.getClass(handler.fixture.target)));
+				};
+			};
+		});
+	}
+
+	var runner:utest.Runner;
+
+	var cases:Iterator<String>;
+
+	var currentCaseName:String;
+
+	var currentCase:utest.ITest;
+
+	var currentCaseFixtures:Array<utest.TestFixture>;
+
+	var teardownClass:Void -> utest.Async;
+
+	var setupAsync:utest.Async;
+
+	var teardownAsync:utest.Async;
+
+	@:value([])
+	var failedTestsInCurrentCase:Array<String>;
+
+	@:value([])
+	var failedCases:Array<String>;
+
+	public function run() {
+		this.cases = this.orderClassesByDependencies();
+		this.runCases();
+	}
+
+	function orderClassesByDependencies() {
+		var `this = this;
+		var result = [];
+		var error = function(testCase:utest.ITest, msg:String) {
+			`this.runner.onProgress.dispatch({totals : `this.runner.length, result : utest.TestResult.ofFailedSetupClass(testCase, utest.Assertation.SetupError(msg, [])), done : `this.runner.executedFixtures});
+		};
+		var added = {
+			{};
+			new haxe.ds.StringMap();
+		};
+		var addClass = [null];
+		addClass[0] = function(cls:String, stack:Array<String>) {
+			if (added.exists(cls)) {
+				return;
+			};
+			var data = {
+				var this = `this.runner.iTestFixtures;
+				cast this.get(cls);
+			};
+			if (stack.indexOf(cls, null) >= 0) {
+				error(data.caseInstance, "Circular dependencies among test classes detected: " + stack.join(" -> "));
+				return;
+			};
+			stack.push(cls);
+			var dependencies = data.dependencies;
+			{
+				var ` = 0;
+				while (` < dependencies.length) {
+					var dependency = dependencies[`];
+					++ `;
+					if ({
+						var this = `this.runner.iTestFixtures;
+						cast this.exists(dependency);
+					}) {
+						addClass[0](dependency, stack);
+					} else {
+						error(data.caseInstance, "This class depends on " + dependency + ", but it cannot be found. Was it added to test runner?");
+						return;
+					};
+				};
+			};
+			result.push(cls);
+			{
+				added.set(cls, true);
+			};
+		};
+		for (cls in {
+			var this = this.runner.iTestFixtures;
+			cast this.keys();
+		}) {
+			addClass[0](cls, []);
+		};
+		return new haxe.iterators.ArrayIterator(result);
+	}
+
+	function failedDependencies(data:{ dependencies : Array<String> }) {
+		{
+			var ` = 0;
+			var `1 = data.dependencies;
+			while (` < `1.length) {
+				var dependency = `1[`];
+				++ `;
+				if (this.failedCases.indexOf(dependency, null) >= 0) {
+					return true;
+				};
+			};
+		};
+		return false;
+	}
+
+	function runCases() {
+		while (this.cases.hasNext()) {
+			this.currentCaseName = this.cases.next();
+			var data = {
+				var this = this.runner.iTestFixtures;
+				var key = this.currentCaseName;
+				cast this.get(key);
+			};
+			this.currentCase = data.caseInstance;
+			this.failedTestsInCurrentCase = [];
+			if (this.failedDependencies(data)) {
+				this.failedCases.push(this.currentCaseName);
+				continue;
+			};
+			utest.utils.Print.startCase(this.currentCaseName);
+			this.currentCaseFixtures = data.fixtures;
+			this.teardownClass = data.teardownClass;
+			try {
+				this.setupAsync = data.setupClass();
+			} catch (`78:Dynamic) {
+				var `79 = haxe.Exception.caught(`78);
+				var `80 = `79.unwrap();
+				if (true) {
+					var e = `80;
+					{
+						this.setupFailed(utest.Assertation.SetupError("setupClass failed: " + Std.string(e), haxe._CallStack.CallStack_Impl_.exceptionStack()));
+						return;
+					};
+				} else throw `78;
+			};
+			if (this.setupAsync.resolved) {
+				if (! this.runFixtures(null)) {
+					return;
+				};
+			} else {
+				this.setupAsync.then(this.checkSetup);
+				return;
+			};
+		};
+		this.runner.runNext(null);
+	}
+
+	function checkSetup() {
+		if (this.setupAsync.timedOut) {
+			this.setupFailed(utest.Assertation.SetupError("setupClass timeout", []));
+		} else {
+			this.runFixtures(null);
+		};
+	}
+
+	function setupFailed(assertation:utest.Assertation) {
+		this.runner.executedFixtures += this.currentCaseFixtures.length;
+		this.runner.onProgress.dispatch({totals : this.runner.length, result : utest.TestResult.ofFailedSetupClass(this.currentCase, assertation), done : this.runner.executedFixtures});
+		this.runCases();
+	}
+
+	function runFixtures(finishedHandler:Null<utest.TestHandler<utest.TestFixture>> = null) {
+		while (this.currentCaseFixtures.length > 0) {
+			var fixture = this.currentCaseFixtures.shift();
+			{
+				var ` = 0;
+				var `1 = fixture.test.dependencies;
+				while (` < `1.length) {
+					var dep = `1[`];
+					++ `;
+					if (this.failedTestsInCurrentCase.indexOf(dep, null) >= 0) {
+						fixture.ignoringInfo = utest._IgnoredFixture.IgnoredFixture_Impl_.Ignored("Failed dependencies");
+						break;
+					};
+				};
+			};
+			var handler = this.runner.runFixture(fixture);
+			if (! handler.finished) {
+				handler.onComplete.add(this.runFixtures);
+				return false;
+			};
+		};
+		try {
+			this.teardownAsync = this.teardownClass();
+		} catch (`81:Dynamic) {
+			var `82 = haxe.Exception.caught(`81);
+			var `83 = `82.unwrap();
+			if (true) {
+				var e = `83;
+				{
+					this.teardownFailed(utest.Assertation.TeardownError("teardownClass failed: " + Std.string(e), haxe._CallStack.CallStack_Impl_.exceptionStack()));
+					return true;
+				};
+			} else throw `81;
+		};
+		if (this.teardownAsync.resolved && finishedHandler == null) {
+			return true;
+		};
+		this.teardownAsync.then(this.checkTeardown);
+		return false;
+	}
+
+	function checkTeardown() {
+		if (this.teardownAsync.timedOut) {
+			this.teardownFailed(utest.Assertation.TeardownError("teardownClass timeout", []));
+		};
+		this.runCases();
+	}
+
+	function teardownFailed(assertation:utest.Assertation) {
+		this.runner.onProgress.dispatch({totals : this.runner.length, result : utest.TestResult.ofFailedTeardownClass(this.currentCase, assertation), done : this.runner.executedFixtures});
+	}
+}

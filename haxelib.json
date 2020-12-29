@@ -1,0 +1,11 @@
+{
+    "name": "postite_macro",
+    "url" : " ",
+    "license": "",
+    "tags": ["macro"],
+    "classPath":"src",
+    "description": "",
+    "version": "0.0.1",
+    "releasenote": "Initial release, everything is working correctly.",
+    "contributors": ["postite"]
+  }

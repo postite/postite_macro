@@ -1,0 +1,8 @@
+@:used
+class RunAll {
+
+	@:keep
+	static function main() {
+		utest.UTest.run([new TestLoad()], null);
+	}
+}

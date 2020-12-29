@@ -1,0 +1,6 @@
+class utest.utils.Misc {
+
+	public static inline function isOfType(v:Dynamic, t:Dynamic) {
+		return Std.isOfType(v, t);
+	}
+}

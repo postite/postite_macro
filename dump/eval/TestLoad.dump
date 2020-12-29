@@ -1,0 +1,23 @@
+@:directlyUsed @:used @:utestProcessed @:build(utest.utils.TestBuilder.build()) @:autoBuild(utest.utils.TestBuilder.build())
+class TestLoad extends utest.Test {
+
+	@:pure(true)
+	public function new() {
+		super();
+	}
+
+	public function testLoad() {
+		utest.Assert.isTrue(new LoadFile().file.length == 2, null, {fileName : "tests/RunAll.hx", lineNumber : 19, className : "TestLoad", methodName : "testLoad"});
+	}
+
+	@:noCompletion @:keep
+	public function __initializeUtest__() {
+		var `this = this;
+		var init = super.__initializeUtest__();
+		init.tests.push({name : "testLoad", dependencies : [], execute : function() {
+			`this.testLoad();
+			return utest.Async.getResolved();
+		}});
+		return init;
+	}
+}

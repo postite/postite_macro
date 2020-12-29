@@ -1,0 +1,13 @@
+@:used
+class utest.utils.Print {
+
+	public static function immediately(msg:String) {
+		Sys.print(msg);
+	}
+
+	@:pure(true)
+	public static function startCase(caseName:Dynamic) {}
+
+	@:pure(true)
+	public static function startTest(name:String) {}
+}

@@ -1,0 +1,11 @@
+@:directlyUsed @:used @:build(loadfile.MacLoadFile.load("file.json"))
+class loadfile.LoadFile {
+
+	@:pure(true)
+	public function new() {
+		this.doz = [{name : "one", stuff : "bim"}, {name : "two", stuff : "bam"}];
+	}
+
+	@:value([{ name : "one", stuff : "bim" }, { name : "two", stuff : "bam" }])
+	public var doz:Array<Dynamic>;
+}
