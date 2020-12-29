@@ -6,7 +6,7 @@ import haxe.io.Path;
 import haxe.macro.Expr.Field;
 class MacLoadFile{
     public static function load(file:String){
-        trace( "hello");
+       // trace( "hello");
         var t=loadme(file);
         var fields=haxe.macro.Context.getBuildFields();
         for( field in fields){
@@ -14,7 +14,7 @@ class MacLoadFile{
 
                 //fields.remove(field);
                 var kind=field.kind.getParameters()[0];
-                trace(kind);
+                //trace(kind);
                         field.name=Path.withoutExtension(file);
                         field.access= [Access.APublic];
                         field.kind=FVar(kind , macro $v{t});
