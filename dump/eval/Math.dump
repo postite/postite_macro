@@ -1,0 +1,80 @@
+@:directlyUsed @:used @:pure
+extern class Math {
+
+	static var PI(default,null):Float;
+
+	static var NEGATIVE_INFINITY(default,null):Float;
+
+	static var POSITIVE_INFINITY(default,null):Float;
+
+	static var NaN(default,null):Float;
+
+	@:pure(true)
+	static function abs(v:Float):Float;
+
+	@:pure(true)
+	static function min(a:Float, b:Float):Float;
+
+	@:pure(true)
+	static function max(a:Float, b:Float):Float;
+
+	@:pure(true)
+	static function sin(v:Float):Float;
+
+	@:pure(true)
+	static function cos(v:Float):Float;
+
+	@:pure(true)
+	static function tan(v:Float):Float;
+
+	@:pure(true)
+	static function asin(v:Float):Float;
+
+	@:pure(true)
+	static function acos(v:Float):Float;
+
+	@:pure(true)
+	static function atan(v:Float):Float;
+
+	@:pure(true)
+	static function atan2(y:Float, x:Float):Float;
+
+	@:pure(true)
+	static function exp(v:Float):Float;
+
+	@:pure(true)
+	static function log(v:Float):Float;
+
+	@:pure(true)
+	static function pow(v:Float, exp:Float):Float;
+
+	@:pure(true)
+	static function sqrt(v:Float):Float;
+
+	@:pure(true)
+	static function round(v:Float):Int;
+
+	@:pure(true)
+	static function floor(v:Float):Int;
+
+	@:pure(true)
+	static function ceil(v:Float):Int;
+
+	@:pure(true)
+	static function random():Float;
+
+	@:pure(true)
+	static function ffloor(v:Float):Float;
+
+	@:pure(true)
+	static function fceil(v:Float):Float;
+
+	@:pure(true)
+	static function fround(v:Float):Float;
+
+	@:pure(true)
+	static function isFinite(f:Float):Bool;
+
+	@:pure(true)
+	static function isNaN(f:Float):Bool;
+}

@@ -1,0 +1,38 @@
+class loadfile.MacLoadFile {
+
+	@:has_untyped
+	public static function load(file:String) {
+		haxe.Log.trace("hello", {fileName : "src/loadfile/MacLoadFile.hx", lineNumber : 9, className : "loadfile.MacLoadFile", methodName : "load"});
+		var t = loadfile.MacLoadFile.loadme(file);
+		var fields = haxe.macro.Context.getBuildFields();
+		{
+			var ` = 0;
+			while (` < fields.length) {
+				var field = fields[`];
+				++ `;
+				if (field.name == haxe.io.Path.withoutExtension(file)) {
+					var kind = {
+						var e = field.kind;
+						Type.enumParameters(e);
+					}[0];
+					haxe.Log.trace(kind, {fileName : "src/loadfile/MacLoadFile.hx", lineNumber : 17, className : "loadfile.MacLoadFile", methodName : "load"});
+					field.name = haxe.io.Path.withoutExtension(file);
+					field.access = [haxe.macro.Access.APublic];
+					field.kind = haxe.macro.FieldType.FVar(kind, cast haxe.macro.Context.makeExpr(t, $__mk_pos__("src/loadfile/MacLoadFile.hx", 702, 705)));
+					field.pos = haxe.macro.Context.currentPos();
+					break;
+				} else {
+					fields.push({name : haxe.io.Path.withoutExtension(file), access : [haxe.macro.Access.APublic], kind : haxe.macro.FieldType.FVar(cast haxe.macro.ComplexType.TPath({pack : [], name : "Array", params : [haxe.macro.TypeParam.TPType(haxe.macro.ComplexType.TPath({pack : [], name : "Dynamic", params : []}))]}), cast haxe.macro.Context.makeExpr(t, $__mk_pos__("src/loadfile/MacLoadFile.hx", 978, 981))), pos : haxe.macro.Context.currentPos()});
+				};
+			};
+		};
+		return fields;
+	}
+
+	static function loadme(f:String) {
+		var cwd = Sys.getCwd();
+		var path = haxe.io.Path.join([cwd, f]);
+		var content = sys.io.File.getContent(path);
+		return new haxe.format.JsonParser(content).doParse();
+	}
+}

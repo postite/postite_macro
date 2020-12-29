@@ -1,0 +1,18 @@
+class utest.utils.Macro {
+
+	@:has_untyped
+	public static macro function checkHaxe() {
+		return cast {expr : haxe.macro.ExprDef.EBlock([]), pos : $__mk_pos__("/Users/postite/haxe/haxe_libraries/utest/1.13.1/haxelib/src/utest/utils/Macro.hx", 290, 292)};
+	}
+
+	@:has_untyped
+	public static macro function importEnvSettings() {
+		var env = Sys.environment();
+		for (name in env.keys()) {
+			if (name.indexOf("UTEST_", null) == 0 && ! haxe.macro.Context.defined(name)) {
+				haxe.macro.Compiler.define(name, cast env.get(name));
+			};
+		};
+		return cast {expr : haxe.macro.ExprDef.EBlock([]), pos : $__mk_pos__("/Users/postite/haxe/haxe_libraries/utest/1.13.1/haxelib/src/utest/utils/Macro.hx", 529, 531)};
+	}
+}

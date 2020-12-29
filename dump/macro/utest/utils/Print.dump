@@ -1,0 +1,10 @@
+class utest.utils.Print {
+
+	public static function immediately(msg:String) {
+		Sys.print(msg);
+	}
+
+	public static function startCase(caseName:Dynamic) {}
+
+	public static function startTest(name:String) {}
+}

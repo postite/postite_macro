@@ -1,0 +1,21 @@
+@:keep @:directlyUsed @:used @:dox(hide) @:noCompletion
+class haxe.NativeStackTrace {
+
+	@:pure(true) @:ifFeature("haxe.NativeStackTrace.exceptionStack")
+	public static inline function saveStack(exception:Any) {}
+
+	@:pure(true)
+	public static function callStack() {
+		return haxe.NativeStackTrace._callStack();
+	}
+
+	@:pure(true)
+	static function _callStack() {
+		return null;
+	}
+
+	@:pure(true)
+	public static function exceptionStack() {
+		return null;
+	}
+}
