@@ -1,6 +1,6 @@
 {
     "name": "postite_macro",
-    "url" : " ",
+    "url" : "",
     "license": "",
     "tags": ["macro"],
     "classPath":"src/",
